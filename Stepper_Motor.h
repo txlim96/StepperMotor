@@ -12,6 +12,16 @@
 #define _NORMAL     0
 #define _ACCELERATE 1
 
+#define ACTIVE_LOW
+
+#ifdef  ACTIVE_LOW
+#define ENABLE  false
+#define DISABLE true
+#else
+#define ENABLE  true
+#define DISABLE false
+#endif
+
 class StepperMotor {
   public:
     StepperMotor(uint8_t dir, uint8_t step, uint8_t en);
@@ -20,11 +30,14 @@ class StepperMotor {
     void move(long);
     void moveTo(long);
     void setCurrentPosition(long);
+    void homeConfig(uint8_t, unsigned int d=5000);
+    bool home(bool inv = true);
     unsigned long stepsLeft();
     bool runStep();
     
   private:
     uint8_t _pins[3]  = {2, 3, 4};
+    uint8_t _homePin;
     
     bool  _direction  = true;
     unsigned int  _maxSpeed     = 0;
